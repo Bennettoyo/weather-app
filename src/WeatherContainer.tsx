@@ -27,7 +27,7 @@ function WeatherContainer() {
         <>
             <Container style={{ display: 'flex', flexDirection: "row", marginTop: '40px' }}>
                 <TextField value={searchTerm} onChange={(e: any) => setSearchTerm(e.target.value)}
-                    fullWidth id="outlined-basic" label="Search By Country Or City" variant="outlined" />
+                    fullWidth id="outlined-basic" label="Search By City/Town" variant="outlined" />
                 <Button onClick={searchWeather} variant="contained">Search</Button>
                 <ToastContainer />
             </Container>
