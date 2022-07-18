@@ -9,17 +9,20 @@ import WeatherInfo from './WeatherInfo';
 import { Weather } from './interfaces/Weather';
 
 function WeatherContainer() {
-    const [data, setData] = useState<Weather>();
+    const [data, setData] = useState<Weather | undefined>();
     const [searchTerm, setSearchTerm] = useState<string>()
 
     const searchWeather = () => {
         fetch(`http://api.weatherapi.com/v1/forecast.json?key=472912f426fb463c925124814221507&q=${searchTerm}&days=7&aqi=yes&alerts=yes`)
             .then(response => response.json())
             .then(data => setData(data)).then();
-        if (data?.error.code === 1006 || data?.error.code === 1003) {
+    }
+
+    useEffect(() => {
+        if (data?.error?.code === 1006 || data?.error?.code === 1003) {
             notifyError('No matching location found.');
         }
-    }
+    }, [data])
 
     const notifyError = (message: string) => toast.error(message);
 
@@ -31,7 +34,7 @@ function WeatherContainer() {
                 <Button onClick={searchWeather} variant="contained">Search</Button>
                 <ToastContainer />
             </Container>
-            {data && <WeatherInfo data={data}></WeatherInfo>}
+            {data && data?.error?.code !== 1006 && data?.error?.code !== 1003 && <WeatherInfo data={data}></WeatherInfo>}
         </>
     );
 }
