@@ -4,7 +4,9 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Forecast, hour } from "./interfaces/Forecast"
-
+import { Weather } from './interfaces/Weather';
+import { Paper } from '@mui/material';
+import Moment from 'react-moment';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -12,22 +14,9 @@ interface TabPanelProps {
     value: number;
 }
 
-interface forecastDaysProps {
-    forecastDays: Forecast
+interface WeatherInfoProps {
+    data: Weather
 }
-
-interface forecastDays {
-    date: string;
-    day: {
-        avghumidity: number;
-    };
-    astro: {
-        sunrise: string;
-        sunset: string;
-    };
-    hour: hour[];
-}
-
 
 function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
@@ -56,31 +45,52 @@ function a11yProps(index: number) {
     };
 }
 
-export default function BasicTabs(forecastDays: forecastDays) {
+export default function BasicTabs({ data }: WeatherInfoProps) {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
+    const forecastDays = data.forecast.forecastday.map((a, i) => {
+        return (
+            <TabPanel value={value} index={i}>
+                {forecastDay(a)}
+            </TabPanel>
+        )
+    })
+
+    const forecastDaysTabs = data.forecast.forecastday.map((a, i) => {
+        return (
+
+            <Tab label={<Moment format='ddd Do'>{a.date}</Moment>} {...a11yProps(i)} />
+        )
+    })
+
+    function forecastDay(data: any) {
+        return data.hour.map((b: any) => {
+            return (
+                <Paper sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', width: "65%", margin: 'auto', marginBottom: '5px' }}>
+                    <img src={`${b.condition.icon}`} alt={`${b.condition.icon}`} />
+                    <span style={{ flexGrow: 2 }}>
+                        <b>{b.condition.text}</b> - Temp: {b.temp_c}C,  Chance of Rain: {b.chance_of_rain}%, Humidity: {b.humidity}%
+                    </span>
+                    <span style={{ marginRight: '10px' }}>
+                        - <Moment format='hh:mm A'>{b.time}</Moment>
+                    </span>
+                </Paper>
+            )
+        })
+    }
+
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Tue 1st" {...a11yProps(0)} />
-                    <Tab label="Wed 2nd" {...a11yProps(1)} />
-                    <Tab label="Thur 3rd" {...a11yProps(2)} />
+                <Tabs value={value} onChange={handleChange} aria-label="basic tabs">
+                    {forecastDaysTabs}
                 </Tabs>
             </Box>
-            <TabPanel value={value} index={0}>
-                Item One
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                Item Two
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                Item Three
-            </TabPanel>
+            {forecastDays}
         </Box>
     );
 }

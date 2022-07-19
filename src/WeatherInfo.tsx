@@ -6,25 +6,13 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import BasicTabs from './Tabs';
-
+import Moment from 'react-moment';
 
 interface WeatherInfoProps {
     data: Weather
 }
 
 function WeatherInfo({ data }: WeatherInfoProps) {
-
-    // const days = data.forecast.forecastday.map((a) => {
-    //     return a.hour.map((b) => {
-    //         return <Paper sx={{ display: 'flex', alignItems: 'center', width: "80%", margin: 'auto' }}>{b.time}, <img src={`${b.condition.icon}`} alt={`${b.condition.icon}`} />  - {b.condition.text}, clouds: {b.cloud}, Chance of Rain: {b.chance_of_rain}%, Humidity: {b.humidity}%, Temp: {b.temp_c}C, feels like: {b.feelslike_c}C</Paper>
-    //     })
-    // })
-
-    // same as above, but map each forecast day into a "tab panel" then map over that in the map panel
-    const forecastDays = data.forecast.forecastday.map((a) => {
-        return a;
-    })
-
 
     return (
         <>
@@ -38,9 +26,9 @@ function WeatherInfo({ data }: WeatherInfoProps) {
                         <img src={`${data.current.condition.icon}`} alt={`${data.current.condition.text}`} />
                     </Typography>
                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        {data.location.country}, {data.location.name}, {data.location.localtime}
+                        {data.location.country}, {data.location.name}, <Moment format='Do MMM YYYY, hh:mm A'>{data.location.localtime}</Moment>
                     </Typography>
-                    <Typography variant="body2">
+                    <Typography>
                         Current Temp: {data.current.temp_c}C
                         <br />
                         Feels like: {data.current.feelslike_c}C
@@ -49,7 +37,7 @@ function WeatherInfo({ data }: WeatherInfoProps) {
                     </Typography>
                 </CardContent>
                 <CardContent sx={{ flexGrow: 1, display: 'flex', alignItems: 'flex-end' }}>
-                    <Typography variant="body2">
+                    <Typography>
                         Gust: {data.current.gust_mph}mph
                         <br />
                         Wind Degrees: {data.current.wind_degree}
@@ -61,9 +49,7 @@ function WeatherInfo({ data }: WeatherInfoProps) {
                 </CardContent>
             </Card>
 
-            {/* {forecastDays} */}
-            <BasicTabs forecastDays={forecastDays}></BasicTabs>
-            {/* {days} */}
+            <BasicTabs data={data}></BasicTabs>
         </>
     );
 }
