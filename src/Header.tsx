@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import WbCloudyOutlinedIcon from '@mui/icons-material/WbCloudyOutlined';
 
 export default function Header() {
     return (
@@ -19,7 +20,7 @@ export default function Header() {
                     >
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Weather Report
+                        Weather Report <WbCloudyOutlinedIcon></WbCloudyOutlinedIcon>
                     </Typography>
                 </Toolbar>
             </AppBar>
