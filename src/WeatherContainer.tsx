@@ -17,7 +17,7 @@ function WeatherContainer() {
 
     const searchWeather = () => {
         setSearching(true);
-        fetch(`https://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_WEATHER_API_KEY}&q=${searchTerm}&days=7&aqi=yes&alerts=yes`)
+        fetch(`https://api.weatherapi.com/v1/forecast.json?key=cc783d00b1eb4b07a14144003222007&q=${searchTerm}&days=7&aqi=yes&alerts=yes`)
             .then(response => response.json())
             .then(data => setData(data)).then(() => setSearching(false));
     }
